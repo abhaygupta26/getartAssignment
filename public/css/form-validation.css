@@ -1,0 +1,9 @@
+.container {
+    max-width: 960px;
+  }
+  .hide{
+    display:none;
+  }
+  .show{
+    display:block;
+  }

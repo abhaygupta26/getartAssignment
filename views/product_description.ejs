@@ -1,0 +1,132 @@
+<%- include("header") -%>
+
+    
+    <div class="container">
+      <main>
+        <div class="py-3 text-center">
+          <h2>Add Product Details</h2>
+        </div>
+    
+          <div class="col-md-7 col-lg-8">
+            <form action="/" method="post" enctype="multipart/form-data">
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label for="product_title" class="form-label">Product Title</label>
+                  <input type="text" class="form-control" id="product_title" placeholder="Enter Title Here" name="product_title" required>
+                  <div class="invalid-feedback">
+                    Valid first name is required.
+                  </div>
+                </div>
+    
+                <div class="col-12">
+                  <label for="product_description" class="form-label">Product Description</label><br>
+                  <textarea id="product_description" class="form-label" name="product_description" rows="4" cols="56" placeholder="Product Description"></textarea>
+                  <div class="invalid-feedback">
+                    Valid last name is required.
+                  </div>
+                </div>
+    
+                <div class="col-sm-6">
+                  <label for="upload_media" class="form-label">Upload Media</label>
+                  <div>
+                    <input type="file" name="image">
+                  </div>
+                </div>
+    
+                <div class="col-12">
+                  <label for="product_variant" class="form-label">Product Variant</label><br>
+                    <div class="row g-3 hide" id="hidden_div">
+                        <div class="dropdown col-sm-3">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Variant
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" name="size_d" href="javascript:size()">Size</a></li>
+                            <li><a class="dropdown-item" name="color_d" href="#" onclick="addHtml()">Color</a></li>
+                            <li><a class="dropdown-item" name="material_d" href="javascript:material()">Material</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    
+                    <div class="mt-3">
+                        <p id="out"></p>
+                    </div>
+                    
+                    <div class="col-md-12 mt-3">
+                        <button id="variant_button" type="button" class="btn btn-dark">Add Variant Option</button>
+                    </div>
+                  
+                </div>
+    
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label for="seo_title" class="form-label">SEO Meta Details</label>
+                    <input type="text" class="form-control" id="seo_title" placeholder="SEO Title" name="seo_title" required>
+                  </div>
+      
+                  <div class="col-lg-12">
+                    <textarea id="seo_description" name="seo_description" rows="4" cols="55" placeholder="SEO Description"></textarea>
+                </div>
+    
+              <input class="w-100 btn btn-primary btn-lg" type="submit">
+            </form>
+          </div>
+        </div>
+      </main>
+      
+    </div>
+    
+    <!--------------------------------------------------SCRIPTS--------------------------------------------------------->
+    
+    <script src="/js/jscolor.js"></script>
+    <script>
+
+        jscolor.presets.default = {
+                    position: 'right',
+                    palette: [
+                        '#000000', '#7d7d7d', '#870014', '#ec1c23', '#ff7e26',
+                        '#fef100', '#22b14b', '#00a1e7', '#3f47cc', '#a349a4',
+                        '#ffffff', '#c3c3c3', '#b87957', '#feaec9', '#ffc80d',
+                        '#eee3af', '#b5e61d', '#99d9ea', '#7092be', '#c8bfe7',
+                    ],
+                    //paletteCols: 12,
+                    //hideOnPaletteClick: true,
+        };
+
+        $("#variant_button").click(function(){
+            document.querySelector(".hide").classList.remove("hide");
+        });
+
+        function size(){
+            var d1 = '<div class="col-sm-6 form-inline ms-3 mt-2">', d2 = '<div class="row">', d3 = '<div class="col-sm-4 form-group" style="border: 1px solid;">', d4 = '<label for="size_cate">Size</label><br>';
+            var d5 = '<input type="text" class="form-control-plaintext" placeholder="Size" name="size_cate" id="">', d6 = '</div>', d7 = '<div class="col-sm-4 form-group" style="border: 1px solid;">', d8 = '<label for="size_price">Price</label><br>';
+            var d9 = '<input type="text" class="form-control-plaintext" placeholder="Price" name="size_price" id="">', d10 = '</div>', d11 = '<div class="col-sm-4 form-group" style="border: 1px solid;">', d12 = '<label for="size_quantity">Quantity</label><br>';
+            var d13 = '<input type="text" class="form-control-plaintext" placeholder="Quantity" name="size_quantity" id="">', d14 = '</div>', d15 = '</div>', d16 = '</div>';         
+            var d_final = d1+d2+d3+d4+d5+d6+d7+d8+d9+d10+d11+d12+d13+d14+d15+d16; 
+			// $(".br").append("<button>Click Me</button>");
+            $(d_final).insertAfter( "#hidden_div" );
+
+		}
+
+        function addHtml() {
+            document.querySelector('#out').innerHTML += '<input data-jscolor="{}" name="color_pick">'
+            jscolor.install() // recognizes new inputs and installs jscolor on them
+        }
+
+        function material(){
+            var m1 = '<div class="mt-3 ms-1"><input type="text" name="product_material" id="" placeholder="Add Material"></div>';
+            $(m1).insertAfter("#hidden_div");
+        }
+    </script>
+    
+    
+
+    
+    
+    <!-- <script src="form-validation.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+      
+
+<%- include("footer") -%>
