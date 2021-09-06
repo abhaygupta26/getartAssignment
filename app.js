@@ -114,7 +114,7 @@ app.post("/", upload.single("image"), function (req,res) {
             item.save(function (err) {
                 if(!err){
                     console.log("Item is saved in the database");
-                    res.redirect("/productsListing");
+                    res.redirect("/register");
                 }
             });
         }
@@ -124,7 +124,7 @@ app.post("/", upload.single("image"), function (req,res) {
 });
 
 app.get("/productsListing", function (req, res) {
-    
+    if(req.isAuthenticated()){
         Product.find({}, function (err, foundProducts) {
             if(err){
                 console.log(err);
@@ -137,6 +137,9 @@ app.get("/productsListing", function (req, res) {
                 }
             }
         });
+    } else{
+        res.redirect("/login");
+    }
 });
 
 app.get("/productsListing/:productId", function(req, res){
