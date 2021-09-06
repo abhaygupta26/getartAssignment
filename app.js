@@ -8,7 +8,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const mongoose = require("mongoose");
 const path = require("path");
 const multer = require("multer");
-const { log } = require("console");
+const { RSA_NO_PADDING } = require("constants");
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null,"Images")
@@ -114,7 +114,7 @@ app.post("/", upload.single("image"), function (req,res) {
             item.save(function (err) {
                 if(!err){
                     console.log("Item is saved in the database");
-                    res.send("First Phase is completed");
+                    res.redirect("/register");
                 }
             });
         }
@@ -124,18 +124,25 @@ app.post("/", upload.single("image"), function (req,res) {
 });
 
 app.get("/productsListing", function (req, res) {
-    Product.find({}, function (err, foundProducts) {
-        if(err){
-            console.log(err);
-        }else{
-            if(foundProducts){
-                if(req.isAuthenticated){
+    if(req.isAuthenticated()){
+        Product.find({}, function (err, foundProducts) {
+            if(err){
+                console.log(err);
+            }else{
+                if(foundProducts){
+                   
                     res.render("products_listing", {products: foundProducts});
+                 
+                        
                 }
-                
             }
-        }
-    })
+        });
+    }else{
+        res.redirect("/login");
+    }
+    
+        
+    
 });
 
 app.get("/productsListing/:productId", function(req, res){
@@ -170,7 +177,7 @@ app.post("/register", (req, res) => {
         }else{
             passport.authenticate("local")(req, res, function(){
                 console.log("register");
-                res.redirect("/products_listing");
+                res.redirect("/productsListing");
             });
         }
     });
@@ -193,29 +200,20 @@ app.post("/login", (req, res) => {
           console.log(err);
      }else{
          passport.authenticate("local")(req, res, function(){
-             res.redirect("/products_listing");
+             res.redirect("/productsListing");
          });
      }
    });
  });
 
 
+ app.get('/logout', function(req, res){
+    req.logout();
+    res.clearCookie();
+    res.redirect('/register');
+  });
 
-//  app.get("/productsListing/:productId", function(req, res){
-//     const requestedId = req.params.productId;
-  
-//     Product.find({}, function (err, foundProducts) {
-//       foundProducts.forEach(function(products){
-//         const storedId = products._id;
-  
-//         if (storedId === requestedId) {
-//           console.log("GOT IT");
-//         }
-//       })
-//     })
-    
-//   });
 
-app.listen(3000, function(){
+app.listen(process.env.PORT || 3000, function(){
     console.log("Server is started on the Port 3000");
 });
