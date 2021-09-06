@@ -35,7 +35,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect('mongodb://localhost:27017/assignmentDb', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb+srv://admin-abhay:admin123@cluster0.x7zat.mongodb.net/assignmentDb', {useNewUrlParser: true, useUnifiedTopology: true});
 // mongoose.set('useCreateIndex', true);
 
 const productSchema = mongoose.Schema({
@@ -198,6 +198,7 @@ app.post("/login", (req, res) => {
     req.login(user, function(err) {
      if (err) {
           console.log(err);
+          res.redirect("/login");
      }else{
          passport.authenticate("local")(req, res, function(){
              res.redirect("/productsListing");
