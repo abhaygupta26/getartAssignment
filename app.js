@@ -92,7 +92,7 @@ app.post("/", upload.single("image"), function (req,res) {
         title : req.body.product_title,
         description : req.body.product_description,
         image: {
-            data: fs.readFileSync(path.join(__dirname + '/images/' + req.file.filename)),
+            data: fs.readFileSync(path.join(__dirname + '/Images/' + req.file.filename)),
             
         },
         size_type:req.body.size_cate,
