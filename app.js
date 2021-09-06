@@ -8,8 +8,6 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const mongoose = require("mongoose");
 const path = require("path");
 const multer = require("multer");
-const { RSA_NO_PADDING } = require("constants");
-const { title } = require("process");
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null,"Images")
@@ -168,22 +166,26 @@ app.post("/productsListing/:productId", function(req, res){
     const requestedId = req.params.productId;
     const query = {id:req.user._id}
 
-    Product.findOne({id: requestedId}, function (err, foundProduct) {
+    Product.find({}, function (err, foundProduct) {
         if(err){
             console.log(err)
         }else{
-            console.log(foundProduct.title);
-            console.log(req.user._id);
-            User.findOneAndUpdate(query, {product: foundProduct },function (err, foundUser) {
-                if(err){
-                    console.log(err);
-                }else{
-                    if(foundUser){
-                    console.log(foundUser);
-                    res.render("cart", {title: foundProduct.title, description: foundProduct.description, img:foundProduct.image})
-                    }
+            foundProduct.forEach(function(product){
+                const storedId = product.id;
+                if(requestedId === storedId){
+                    User.findOneAndUpdate(query, {product: product },function (err, foundUser) {
+                        if(err){
+                            console.log(err);
+                        }else{
+                            if(foundUser){
+                            console.log(foundUser);
+                            console.log(product)
+                            res.render("cart", {cartTitle: product.title, cartDescription: product.description, cartImg:product.image});
+                            }
+                        }
+                    });
                 }
-            });
+            })
         }
     });
 
