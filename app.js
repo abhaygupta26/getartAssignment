@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const multer = require("multer");
 const { RSA_NO_PADDING } = require("constants");
+const { title } = require("process");
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null,"Images")
@@ -58,9 +59,10 @@ const productSchema = mongoose.Schema({
 
 const Product = mongoose.model("Product", productSchema);
 
-const userSchema = mongoose.Schema( {
+const userSchema =new mongoose.Schema( {
     email: String,
     password: String,
+    product: productSchema
 });
 userSchema.plugin(passportLocalMongoose);
 
@@ -131,7 +133,7 @@ app.get("/productsListing", function (req, res) {
             }else{
                 if(foundProducts){
                    
-                    res.render("products_listing", {products: foundProducts});
+                    res.render("productsListing", {products: foundProducts});
                  
                         
                 }
@@ -141,6 +143,8 @@ app.get("/productsListing", function (req, res) {
         res.redirect("/login");
     }
 });
+
+
 
 app.get("/productsListing/:productId", function(req, res){
     const requestedId = req.params.productId;
@@ -152,13 +156,38 @@ app.get("/productsListing/:productId", function(req, res){
             foundProducts.forEach(function(product){
                 const storedId = product.id;
                 if(requestedId === storedId){
-                    res.render("product", {title: product.title, description: product.description, image: product.image.data});
+                    res.render("product", {id: product.id ,title: product.title, description: product.description, image: product.image.data});
                 }
             });
         }
     });
 });
 
+app.post("/productsListing/:productId", function(req, res){
+   
+    const requestedId = req.params.productId;
+    const query = {id:req.user._id}
+
+    Product.findOne({id: requestedId}, function (err, foundProduct) {
+        if(err){
+            console.log(err)
+        }else{
+            console.log(foundProduct.title);
+            console.log(req.user._id);
+            User.findOneAndUpdate(query, {product: foundProduct },function (err, foundUser) {
+                if(err){
+                    console.log(err);
+                }else{
+                    if(foundUser){
+                    console.log(foundUser);
+                    res.render("cart", {title: foundProduct.title, description: foundProduct.description, img:foundProduct.image})
+                    }
+                }
+            });
+        }
+    });
+
+});
 
 app.get("/register", function (req, res) {
     res.render("register");

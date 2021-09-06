@@ -11,18 +11,23 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-sm-4">
-                <img src="data:image/<%=image.contentType%>;base64,
-                <%=image.toString('base64')%>" alt="" height="400px" width="100%%">
-            </div>
-            <div class="col-sm-6" style="border: 1px solid;">
-                <h1><%= title %></h1>
-                <p><%= description %></p>
+    <form action="/productsListing/<%= id %>" method="POST">
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-sm-4">
+                    <img src="data:image/<%=image.contentType%>;base64,
+                    <%=image.toString('base64')%>" alt="" height="400px" width="100%%">
+                </div>
+                <div class="col-sm-6" style="border: 1px solid;">
+                    <h1 name="productHeading"><%= title %></h1>
+                    <p name="productContent"><%= description %></p>
+                </div>
+                <div class="col-sm-12">
+                    <button class="btn btn-primary col-sm-5" type="submit">Buy Now</button>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
     
 </body>
 </html>

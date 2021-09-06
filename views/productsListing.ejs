@@ -25,26 +25,21 @@
 
 <div class="container text-center mt-5">
 	<h1>Products</h1>
-	<div class="row">
-		<% products.forEach(function(product){ %>
+	
+		<div class="row">
+			<% products.forEach(function(product){ %>
+	
+				<div class="card text-center col-sm-3 mt-3" >
+					<img src="data:image/<%=product.image.contentType%>;base64,
+					  <%=product.image.data.toString('base64')%>" class="card-img-top" alt="..." height="150px">
+					<div class="card-body">
+							<a href="/productsListing/<%= product._id %>"><%= product.title %></a>
+					</div>					
+				</div>
+				<%  })  %>
+		</div>
 
-			<div class="card text-center col-sm-3 mt-3" >
-				<img src="data:image/<%=product.image.contentType%>;base64,
-				  <%=product.image.data.toString('base64')%>" class="card-img-top" alt="..." height="150px">
-				<div class="card-body">
-						<a href="/productsListing/<%= product._id %>"><%= product.title %></a>
-				</div>
-				<div class="row">
-					<div class="col-sm-12 mb-3">
-						<button class="btn btn-primary col-sm-5">Add To Cart</button>
-						<button class="btn btn-primary col-sm-5">Buy Now</button>
-					</div>
-				</div>
-				
-				
-			</div>
-			<%  })  %>
-	</div>
+
 </div>
 
 
